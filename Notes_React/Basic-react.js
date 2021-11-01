@@ -198,3 +198,473 @@ variable title dengan {panggil_namavariable}, dan juga selain itu dalam {}
 kita bisa memanggil method juga dan contoh diatas kita memanggil method toUpperCase()
 dalam {} h4 <h4>{author.toUpperCase()}</h4> dan pembuatan variable di atas return 
 bukan didalam return HTML or JSX.
+
+
+# PROPS / Properties
+
+import React from 'react';
+import ReactDom from 'react-dom';
+
+
+import './index.css';
+
+const author = 'David Flanagan';
+const title =
+  "JavaScript: The Definitive Guide: Master the World's Most-Used Programming Language 7th Edition";
+const img =
+  'https://images-na.ssl-images-amazon.com/images/I/51HbNW6RzhL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg';
+
+function BookList() {
+  return (
+    <section className='bookList'>
+      <Book />
+    </section>
+  );
+}
+
+const Book = (props) => {
+  console.log(props);
+  return (
+    <article className='book'>
+      <img src={img}></img>
+      <h1>{title}</h1>
+      <h4>{author.toUpperCase()}</h4>
+    </article>
+  );
+};
+
+ReactDom.render(<BookList />, document.getElementById('root'));
+
+Kita lihat props disini dalam parameter Book Component dia adalah untuk
+memanggil properties, dan jika kamu cek dengan console.log dia menghasilkan : 
+object { }
+
+dan untuk membuat properties tsb kita bisa membuat nya pada component render utama
+agar bisa dirender misal dalam Book component kita buat properties job dgn value developer
+
+function BookList() {
+  return (
+    <section className='bookList'>
+      <Book job='developer'/>
+    </section>
+  );
+}
+
+const Book = (props) => {
+  console.log(props);
+  return (
+    <article className='book'>
+      <img src={img}></img>
+      <h1>{title}</h1>
+      <h4>{author.toUpperCase()}</h4>
+    </article>
+  );
+};
+
+dan disini hasilnya di console.log Object { job: "developer" }
+dan bagaimana untuk memanggil props agar ditampilkan? kita bisa memanggilnya dgn :
+props.nameproperties misal di component book kita tambah <p></p>
+<p>{props.job}</p>
+
+contoh lagi kita tambah kembali component book pada bookList :
+
+function BookList() {
+  return (
+    <section className='bookList'>
+      <Book job='developer'/>
+      <Book title='random title' number={12}></Book>
+    </section>
+  );
+}
+
+dan disini pada book component ke-2 props nya adalah title dan number 
+shingga bisa panggil seperti ini dalam component book
+
+const Book = (props) => {
+  console.log(props);
+  return (
+    <article className='book'>
+      <img src={img}></img>
+      <h1>{title}</h1>
+      <h4>{author.toUpperCase()}</h4>
+      <p>{props.job}</p>
+      <p>
+        {props.title} {props.number}
+      </p>
+    </article>
+  );
+};
+
+jadi disini untuk component book pertama h1-p props.job tampil
+untuk component kedua h1-p untuk props.title - number tampil dan 
+props.job tidak tampil karena props.job hanya untuk component book pertama saja 
+bukan component kedua dalam bookList component
+
+
+misal contoh lagi kita coba buat 1 obj array yang berisi semua data booklist
+menjadi firstBook :
+
+import React from 'react';
+import ReactDom from 'react-dom';
+
+// add CSS
+import './index.css';
+
+const firstBook = {
+  img: 'https://images-na.ssl-images-amazon.com/images/I/51HbNW6RzhL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
+  title:
+    "JavaScript: The Definitive Guide: Master the World's Most-Used Programming Language 7th Edition",
+  author: 'David Flanagan',
+};
+
+function BookList() {
+  return (
+    <section className='bookList'>
+      <Book
+        img={firstBook.img}
+        title={firstBook.title}
+        author={firstBook.author}
+      />
+      <Book title='random title' number={12}></Book>
+    </section>
+  );
+}
+
+const Book = (props) => {
+  console.log(props);
+  return (
+    <article className='book'>
+      <img src={props.img}></img>
+      <h1>{props.title}</h1>
+      <h4>{props.author}</h4>
+    </article>
+  );
+};
+
+ReactDom.render(<BookList />, document.getElementById('root'));
+
+ingat dalam book component untuk memanggil props kita panggil nama propertiesnya bukan valuenya
+:
+<img src={props.img}></img>
+
+jadi props.img dia memanggil properties img dari Book yg berada dalam component BookList
+sehingga akan tampil value img dst.
+
+<Book
+  img={firstBook.img}
+  title={firstBook.title}
+  author={firstBook.author}
+/>
+
+dan disini kamu bisa buat component ke-2 juga dalam BookList jadi secara 
+keseluruhan code nya seperti ini :
+
+import React from 'react';
+import ReactDom from 'react-dom';
+
+// add CSS
+import './index.css';
+
+const firstBook = {
+  img: 'https://images-na.ssl-images-amazon.com/images/I/51HbNW6RzhL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
+  title:
+    "JavaScript: The Definitive Guide: Master the World's Most-Used Programming Language 7th Edition",
+  author: 'David Flanagan',
+};
+
+const secondBook = {
+  img: 'https://images-na.ssl-images-amazon.com/images/I/51InjRPaF7L._SX377_BO1,204,203,200_.jpg',
+  title:
+    'Eloquent JavaScript, 3rd Edition: A Modern Introduction to Programming 3rd Edition ',
+  author: 'Marijn Haverbeke ',
+};
+
+function BookList() {
+  return (
+    <section className='bookList'>
+      <Book
+        img={firstBook.img}
+        title={firstBook.title}
+        author={firstBook.author}
+      />
+      <Book
+        img={secondBook.img}
+        title={secondBook.title}
+        author={secondBook.author}
+      />
+    </section>
+  );
+}
+
+const Book = (props) => {
+  console.log(props);
+  return (
+    <article className='book'>
+      <img src={props.img}></img>
+      <h1>{props.title}</h1>
+      <h4>{props.author}</h4>
+    </article>
+  );
+};
+
+ReactDom.render(<BookList />, document.getElementById('root'));
+
+
+kita bisa liat bahwa dia akan mencetak 2 buku pada browser dengan
+data obj array yanng berbeda, tapi dia akan mencetak hasil props yang sama
+sama tapi dengan data yang berbeda. dan jika kita membuat props dalam bookList 
+untuk book component dgn nama berbeda misal tuk secondBook nama propsnya beda dgn
+props 1 bkn img,title,author maka dlam book component  props.img, title, dll tidak akan tampil, 
+pada browser krna nama props yang kedua berbeda... jadi solusinya nama props sama kan saja, 
+tapi data props nya pada booklist tuk book component berbeda.
+
+
+# Destructuring Object
+
+lebih enak menggunakan Destructuring obj, jadi kamu hanya perlu memanggil propertiesnya saja
+bisa dalam parameter functionnya jadi const Book = ({img, title, author}) =>{}
+atau bisa juga tidak dalam function parameter component jadi :
+const Book = (props)=>{
+  const {img, title, author} = props;
+}
+
+sehingga kedunya lebih enak jadi tanpa perlu mengetikan props.image
+jadi hanya perlu mengetikan name property nya saja <img src={img}></img>
+jadi gak perlu <img src={props.img}></img>
+
+
+# PROPS Children
+jadi dia itu berada diantara open tag dan closing tag
+
+import React from 'react';
+import ReactDom from 'react-dom';
+
+// add CSS
+import './index.css';
+
+const firstBook = {
+  img: 'https://images-na.ssl-images-amazon.com/images/I/51HbNW6RzhL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
+  title:
+    "JavaScript: The Definitive Guide: Master the World's Most-Used Programming Language 7th Edition",
+  author: 'David Flanagan',
+};
+
+const secondBook = {
+  img: 'https://images-na.ssl-images-amazon.com/images/I/51InjRPaF7L._SX377_BO1,204,203,200_.jpg',
+  title:
+    'Eloquent JavaScript, 3rd Edition: A Modern Introduction to Programming 3rd Edition ',
+  author: 'Marijn Haverbeke ',
+};
+
+function BookList() {
+  return (
+    <section className='bookList'>
+      <Book
+        img={firstBook.img}
+        title={firstBook.title}
+        author={firstBook.author}
+      >
+        <p>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae,
+          impedit dolore. Ipsum tempora quo pariatur illo possimus aliquam
+          totam! Qui!
+        </p>
+      </Book>
+      <Book
+        img={secondBook.img}
+        title={secondBook.title}
+        author={secondBook.author}
+      />
+    </section>
+  );
+}
+
+const Book = ({ img, title, author, children }) => {
+  // const {img, title, author} = props
+  return (
+    <article className='book'>
+      <img src={img}></img>
+      <h1>{title}</h1>
+      <h4>{author}</h4>
+      <p>{children}</p>
+    </article>
+  );
+};
+
+ReactDom.render(<BookList />, document.getElementById('root'));
+
+Jangan lupa tuliskan children dalam parameter function agar bisa ditampilkan.
+dan untuk penempatanya bebas.. jika ingin dibawah author maka children akan tampil sesdah author,
+jika sebelum author atau diatas img maka children <p></p> dia akan tampil.
+
+
+#Props use array map, key, and spread operator
+oke disini agar lebih mempermudah kita modifkasi code diatas,
+dan menggabungkan firstBook, dan secondBook menjadi 1 obj dalam array
+dengan nama books, dan menggunakan map array agar kita bisa mencetak dengan mudah,
+mengikuti original array itu sendiri. dan key ada for uniqeu, dan spread operator
+adalah dia untuk menyalin smua obj dalam array, shingga kita hanya perlu memanggil props tsb
+dengan memanggilnya dalam sebuah parameter function dari obj array tsb.
+
+import React from 'react';
+import ReactDom from 'react-dom';
+
+// add CSS
+import './index.css';
+
+const books = [
+  {
+    id: 1,
+    img: 'https://images-na.ssl-images-amazon.com/images/I/51HbNW6RzhL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
+    title:
+      "JavaScript: The Definitive Guide: Master the World's Most-Used Programming Language 7th Edition",
+    author: 'David Flanagan',
+  },
+  {
+    id: 2,
+    img: 'https://images-na.ssl-images-amazon.com/images/I/51InjRPaF7L._SX377_BO1,204,203,200_.jpg',
+    title:
+      'Eloquent JavaScript, 3rd Edition: A Modern Introduction to Programming 3rd Edition ',
+    author: 'Marijn Haverbeke ',
+  },
+  {
+    id: 3,
+    img: 'https://images-na.ssl-images-amazon.com/images/I/31SRWF+LkKL._SX398_BO1,204,203,200_.jpg',
+    title:
+      'JavaScript and JQuery: Interactive Front-End Web Development 1st Edition ',
+    author: 'Jon Duckett',
+  },
+];
+
+function BookList() {
+  return (
+    <section className='bookList'>
+      {books.map((book) => {
+        return <Book key={book.id} {...book} />;
+      })}
+    </section>
+  );
+}
+
+const Book = ({ img, title, author }) => {
+  // const {img, title, author} = props
+  return (
+    <article className='book'>
+      <img src={img}></img>
+      <h1>{title}</h1>
+      <h4>{author}</h4>
+    </article>
+  );
+};
+
+ReactDom.render(<BookList />, document.getElementById('root'));
+
+
+# EVENT like attribute, eventhandler
+onClick, onMouseOver
+
+import React from 'react';
+import ReactDom from 'react-dom';
+
+import './index.css';
+
+const books = [
+  {
+    id: 1,
+    img: 'https://images-na.ssl-images-amazon.com/images/I/51HbNW6RzhL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
+    title:
+      "JavaScript: The Definitive Guide: Master the World's Most-Used Programming Language 7th Edition",
+    author: 'David Flanagan',
+  },
+  {
+    id: 2,
+    img: 'https://images-na.ssl-images-amazon.com/images/I/51InjRPaF7L._SX377_BO1,204,203,200_.jpg',
+    title:
+      'Eloquent JavaScript, 3rd Edition: A Modern Introduction to Programming 3rd Edition ',
+    author: 'Marijn Haverbeke ',
+  },
+  {
+    id: 3,
+    img: 'https://images-na.ssl-images-amazon.com/images/I/31SRWF+LkKL._SX398_BO1,204,203,200_.jpg',
+    title:
+      'JavaScript and JQuery: Interactive Front-End Web Development 1st Edition ',
+    author: 'Jon Duckett',
+  },
+];
+
+function BookList() {
+  return (
+    <section className='bookList'>
+      {books.map((book) => {
+        return <Book key={book.id} {...book} />;
+      })}
+    </section>
+  );
+}
+
+const Book = ({ img, title, author }) => {
+  // attribute, eventHandler
+  // onClick, onMouseOver
+
+  const clickHandler = (e) => {
+    // console.log(e); dia berisi pageX,pageY, target dll
+    // console.log(e.target); menampilkan attirubt elemen reference dari clickHandler
+    alert('hello world');
+  };
+
+  // misal isi paramter dgn author
+  const moreComplex = (author) => {
+    console.log(author);
+  };
+
+  return (
+    // onMouseOver artinya tanpa diklik hnya di arahkan saja dia akan muncul
+    // misal kita ingin menampilkan title
+    <article className='book' onMouseOver={() => console.log(title)}>
+      <img src={img}></img>
+      {/* inline function kita bisa mengambil nilai dari props ketika diklik maka akan muncul  
+      author yang di klik*/}
+      <h1 onClick={() => console.log(author)}>{title}</h1>
+      <h4>{author}</h4>
+      <button type='button' onClick={clickHandler}>
+        reference example
+      </button>
+      {/* dan isi argument dgn author shingga ktika diklik maka akan
+      muncul author karna target yg kita ambil dri author props, dan disini perlu arrow function,
+      jika tanpa arrow function maka akan muncul smua author tnpa di klik krna sebenarnya kita 
+      memanggil author shingga prlukan arrow function */}
+      <button type='button' onClick={() => moreComplex(author)}>
+        more complex example
+      </button>
+    </article>
+  );
+};
+
+ReactDom.render(<BookList />, document.getElementById('root'));
+
+
+
+# IMPORT & EXPORT
+dalam javascript kedua fungsi ini untuk membagi code menjadi potongan kecil,
+agar bisa termanage menjadi lebih mudah... 
+
+jika dalam file menggunakan export const data = {
+
+}
+
+maka ketika di import untuk digunakan name nya harus sama dgn export
+dan menggunakan bracket jadi : 
+
+import {data} from 'pathfile'
+
+jika dalam file menggunakan export default dibawah 
+mka dalam file tsb export default name_ , _name ini harus match dgn nama component tsb.
+misal component namenya Greeting , maka export default Greeting
+dan ketika import agar bisa dipakai bisa menggunakan nama yang bebas yg kita mau..
+
+import GoodMorning from './Greeting'
+
+
+# deploy 
+
+npm run build
